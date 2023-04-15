@@ -1,6 +1,7 @@
-package com.learning.kafka.spring.services;
+package com.learning.kafka.spring.services.impl;
 
 import com.learning.kafka.spring.model.Todo;
+import com.learning.kafka.spring.services.Consumer;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;

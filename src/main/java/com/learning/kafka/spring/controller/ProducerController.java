@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class ProducerController {
 
-    private final Producer producer;
+    private final Producer<Todo> producer;
 
     private final String KAFKA_PRODUCER_KEY = "Todo";
 
