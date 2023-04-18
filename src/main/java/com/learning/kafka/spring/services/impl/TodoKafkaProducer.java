@@ -5,17 +5,20 @@ import com.learning.kafka.spring.services.Producer;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.kafka.support.KafkaHeaders;
+import org.springframework.messaging.Message;
+import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Service;
 
 @Service
 @Slf4j
 public class TodoKafkaProducer implements Producer<Todo> {
 
-    private final KafkaTemplate<String, Object> kafkaTemplate;
+    private final KafkaTemplate<String, Todo> kafkaTemplate;
 
     private final String kafkaTopicName;
 
-    public TodoKafkaProducer(KafkaTemplate<String, Object> kafkaTemplate,
+    public TodoKafkaProducer(KafkaTemplate<String, Todo> kafkaTemplate,
                              @Value("${kafka.topic}") String topicName) {
         this.kafkaTemplate = kafkaTemplate;
         this.kafkaTopicName = topicName;
@@ -24,6 +27,10 @@ public class TodoKafkaProducer implements Producer<Todo> {
     @Override
     public void produceMessage(String key, Todo data) {
         log.info("Produced Message: {}", data);
-        kafkaTemplate.send(kafkaTopicName, key, data);
+        Message<Todo> todoMessage = MessageBuilder
+                .withPayload(data)
+                .setHeader(KafkaHeaders.TOPIC, kafkaTopicName)
+                .build();
+        kafkaTemplate.send(todoMessage);
     }
 }
